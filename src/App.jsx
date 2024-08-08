@@ -6,12 +6,6 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [todoValue, setTodoValue] = useState('');
 
-  // useEffect(() => {
-  //   const localTodos = JSON.parse(localStorage.getItem('todos'));
-  //   if (localTodos) {
-  //     setTodos(localTodos);
-  //   }
-  // }, []);
   useEffect(() => {
     const storedTodos = localStorage.getItem('todos');
     if (storedTodos) {
@@ -19,21 +13,20 @@ function App() {
     }
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem('todos', JSON.stringify(todos));
-  }, [todos]);
-
+  function persistData(newList) {
+    localStorage.setItem('todos', JSON.stringify(newList));
+  }
 
   function handleAddTodo(newTodo) {
-    const combine_todo = [...todos, newTodo]
-    setTodos(combine_todo)
-
+    const combine_todo = [...todos, newTodo];
+    persistData(combine_todo);
+    setTodos(combine_todo);
   }
 
   function handleDeleteTodo(index) {
-    const newTodoList = todos.filter((todo, todoIndex) => todoIndex !== index);
+    const newTodoList = todos.filter((_, todoIndex) => todoIndex !== index);
+    persistData(newTodoList);
     setTodos(newTodoList);
-
   }
 
   function handleEditTodo(index) {
